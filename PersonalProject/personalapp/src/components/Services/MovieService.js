@@ -17,14 +17,6 @@ class MovieService extends React.Component {
     }
     return axios(url, config)
   }
-
-  static getpopularmovies() {
-    const url = `https://api.themoviedb.org/3/movie/popular?api_key=ecb01088d60b983e89731fa1e9b3ad7d&language=en-US&page=1`
-    const config = {
-      type: "GET"
-    }
-    return axios(url, config)
-  }
 }
 
 export default MovieService;

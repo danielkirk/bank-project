@@ -15,7 +15,7 @@ class MoviePage extends React.Component {
 
   async componentDidMount() {
     console.log(this.props.location);
-    const movies = await MovieService.getpopularmovies();
+    const movies = await MovieService.getupcomingmovies();
     this.setState({ movieArray: movies.data.results });
     const currentMovies = await MovieService.getcurrentmovies();
     this.setState({ currentMovieArray: currentMovies.data.results })
