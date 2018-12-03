@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import LoginForm from "./LoginForm";
 import { connect } from "react-redux";
 import "./Homepage.css";
-import { getLocation } from "../redux/AppActions";
+import { getLocation, loginUser } from "../redux/AppActions";
+import { withRouter } from "react-router-dom"
 // import { loginUser } from "../redux/AppActions";
 
 class Login extends Component {
@@ -14,7 +15,7 @@ class Login extends Component {
     };
   }
 
-  componentDidMount() {}
+  componentDidMount() { }
 
   onChange = evt => {
     const key = evt.target.name;
@@ -25,8 +26,9 @@ class Login extends Component {
   };
 
   onClick = evt => {
-    // this.props.loginUser();
-    // this.props.getUserLocation();
+    this.props.setloginUser(this.state.email, this.state.password);
+    this.props.getUserLocation();
+    this.props.history.push("/")
   };
 
   render() {
@@ -69,7 +71,7 @@ class Login extends Component {
                           password={this.state.password}
                           email={this.state.email}
                           onChange={this.onChange}
-                          onClick={this.props.onClick}
+                          onClick={this.onClick}
                         />
                       </form>
                     </div>
@@ -92,16 +94,16 @@ const mapStateToProps = state => {
 
 const dispatchStateToProps = dispatch => {
   return {
-    getUserlocation: () => {
+    getUserLocation: () => {
       dispatch(getLocation());
-    }
-    // loginUser: () => {
-    //   dispatch(loginUser());
-    // }
+    },
+    setloginUser: (username, password) => {
+      dispatch(loginUser(username, password));
+    },
   };
 };
 
-export default connect(
+export default withRouter(connect(
   mapStateToProps,
   dispatchStateToProps
-)(Login);
+)(Login));

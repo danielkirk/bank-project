@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import RegisterForm from "./RegisterForm";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
+import MovieService from "../Services/MovieService"
 import "./Homepage.css";
 
 class Register extends Component {
@@ -52,7 +53,7 @@ class Register extends Component {
     const coordinates = pos.coords;
     console.log(
       `Your current position is: ${coordinates.latitude}, ${
-        coordinates.longitude
+      coordinates.longitude
       }`
     );
   };
@@ -133,8 +134,10 @@ class Register extends Component {
   };
 
   onClick = () => {
+    const { email, password, passwordConfirm } = this.state;
+    const data = { email: email, password: password, confirmPassword: passwordConfirm }
     if (this.state.formValid) {
-      console.log("place axios here");
+      MovieService.loginUser(data, this.onSuccess, this.onError)
     } else {
       this.setState({
         showErrors: true
@@ -142,7 +145,10 @@ class Register extends Component {
     }
   };
 
-  sendToLogin = () => {
+  onError = error => console.log(error)
+
+  onSuccess = (resp) => {
+    console.log(resp);
     this.props.history.push("./login");
   };
 

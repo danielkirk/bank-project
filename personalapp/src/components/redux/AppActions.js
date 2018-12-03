@@ -15,4 +15,60 @@ export function getLocation() {
   };
 }
 
-export function loginUser() {}
+export function loginUser(username, password) {
+  const data = `grant_type=password&username=${username}&password=${password}`;
+  const headers = { "Content-Type": "application/x-www-form-urlencoded" };
+  return {
+    type: "LOGIN_USER",
+    payload: axios
+      .post("/token", data, { headers: headers, withCredentials: true })
+      .then(resp => {
+        sessionStorage.setItem("token", resp.data.access_token)
+        return true;
+      })
+      .catch(err => console.error(err))
+  };
+}
+
+export function checkUser(token) {
+  const headers = { "Content-Type": "application/x-www-form-urlencoded", "Authorization": `Bearer ${token}` };
+  return {
+    type: "CHECK_USER",
+    payload: axios
+      .get("/api/account/userinfo", { headers: headers, withCredentials: true })
+      .then(resp => {
+        console.log(resp)
+        if (sessionStorage.getItem("token") !== null) {
+          return true
+        } else { return false }
+      })
+      .catch(err => { return false })
+  }
+}
+
+export function moviesIntheatres() {
+  return {
+    type: "GET_CURRENT_MOVIES",
+    payload: axios.get("/project/webscrape/Web", { withCredentials: true })
+      .then(resp => {
+        console.log(resp.data)
+        return resp.data
+      })
+      .catch(error => {
+        console.log(error)
+      })
+  }
+}
+
+export function movieTrailers() {
+  return {
+    type: "GET_TRAILERS",
+    payload: axios.get("/project/webscrape/Trailer", { withCredentials: true })
+      .then(resp => {
+        console.log(resp.data)
+        return resp.data
+      })
+      .catch(error => console.log(error))
+  }
+}
+

@@ -34,7 +34,6 @@ const RegisterForm = props => {
           isMulti={true}
           multi={true}
           options={props.options}
-          value={props.value}
           onChange={props.handleChange}
         />
       </div>

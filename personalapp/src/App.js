@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { Route, Switch } from "react-router-dom";
 import { withRouter } from "react-router-dom";
+import { checkUser } from "./components/redux/AppActions"
 import {
   Collapse,
   Navbar,
@@ -14,20 +15,22 @@ import {
   Nav,
   NavItem,
   NavLink,
-  UncontrolledDropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem
-} from 'reactstrap'
+
+} from 'reactstrap';
 import MoviePage from "./components/InnerLayout/MoviePage";
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLoggedIn: false
-    };
+      dropdownOpen: false
+    }
   }
+  componentDidMount() {
+    const token = sessionStorage.getItem("token")
+    this.props.setUserStatus(token);
+  }
+
   onpickerClick = () => {
     this.props.history.push("/moviepicker")
   }
@@ -40,14 +43,20 @@ class App extends Component {
     this.props.history.push("/")
   }
 
-  toggleLogin = () => {
-    this.setState({ isLoggedIn: true });
-    this.props.history.push("/");
-  };
+  onlogoutClick = () => {
+    sessionStorage.removeItem("token")
+  }
+
+  toggle = () => {
+    this.setState({
+      dropdownOpen: !this.state.dropdownOpen
+    })
+  }
+
   render() {
     return (
       <div className="App">
-        {this.state.isLoggedIn || (
+        {!this.props.user.isLoggedIn && (
           <Route
             render={({ location }) => (
               <TransitionGroup>
@@ -59,7 +68,7 @@ class App extends Component {
                   <Switch location={location}>
                     <Route
                       path="/login"
-                      component={() => <Login onClick={this.toggleLogin} />}
+                      component={() => <Login />}
                     />
                     <Route exact path="/" component={Register} />
                   </Switch>
@@ -68,10 +77,10 @@ class App extends Component {
             )}
           />
         )}
-        {!this.state.isLoggedIn || <div>
+        {this.props.user.isLoggedIn && <div>
           <Route path="/" component={MoviePage} />
-          <Navbar color="dark" dark expand="md">
-            <NavbarBrand onClick={this.homeClick} href="#">Movie Matchmaking</NavbarBrand>
+          <Navbar color="black" dark expand="lg">
+            <NavbarBrand style={{ color: "white" }} onClick={this.homeClick} href="#">Movie Matchmaking</NavbarBrand>
             <NavbarToggler onClick={this.toggle} />
             <Collapse isOpen={this.state.isOpen} navbar>
               <Nav className="ml-auto" tabs>
@@ -81,26 +90,16 @@ class App extends Component {
                 <NavItem>
                   <NavLink style={{ color: "white" }} onClick={this.onmovieClick} href="#">Movie Night Randomizer</NavLink>
                 </NavItem>
-                <UncontrolledDropdown nav inNavbar>
-                  <DropdownToggle style={{ color: "white" }} nav caret>
-                    Options
-                </DropdownToggle>
-                  <DropdownMenu right>
-                    <DropdownItem>
-                      Option 1
-                  </DropdownItem>
-                    <DropdownItem>
-                      Option 2
-                  </DropdownItem>
-                    <DropdownItem divider />
-                    <DropdownItem>
-                      Reset
-                  </DropdownItem>
-                  </DropdownMenu>
-                </UncontrolledDropdown>
+                <NavItem>
+                  <NavLink style={{ color: "white" }} onClick={this.onpickerClick} href="#">Profile Settings</NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavLink style={{ color: "red" }} onClick={this.onlogoutClick} href="/login">Logout</NavLink>
+                </NavItem>
               </Nav>
             </Collapse>
           </Navbar>
+
         </div>}
       </div>
     );
@@ -109,8 +108,16 @@ class App extends Component {
 
 const mapStateToProps = state => {
   return {
-    location: state.LocationReducer
+    user: state.AppReducer
   };
 };
 
-export default withRouter(connect(mapStateToProps)(App));
+const mapDispatchToProps = dispatch => {
+  return {
+    setUserStatus: (token) => {
+      dispatch(checkUser(token))
+    }
+  }
+}
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));
