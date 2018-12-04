@@ -72,3 +72,18 @@ export function movieTrailers() {
   }
 }
 
+export function getuser(id) {
+  return {
+    type: "GET_USER",
+    payload: axios.get(`/project/webscrape/${id}`, { withCredentials: true })
+      .then(resp => {
+        console.log(resp.data)
+        return resp.data.Item
+      })
+      .catch(error => console.log(error))
+  }
+}
+
+
+
+

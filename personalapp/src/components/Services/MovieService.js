@@ -55,6 +55,42 @@ class MovieService extends React.Component {
     return axios(url, config)
   }
 
+  static register(data) {
+    return {
+      type: "POST",
+      payload: axios.post("/project/webscrape", data, { withCredentials: true })
+        .then(resp => {
+          sessionStorage.setItem("userId", resp.data.Item);
+          console.log(resp.data.Item)
+        })
+        .catch(error => console.log(error))
+    }
+  }
+
+  static getbyid(id) {
+    const url = `/project/webscrape/${id}`;
+    const config = {
+      type: "GET"
+    }
+    return axios(url, config)
+  }
+
+  static update(id, data) {
+    const url = `/project/webscrape/${id}`;
+    const config = {
+      type: "PUT",
+      data: data
+    }
+    return axios(url, config)
+  }
+
+  static delete(id) {
+    const url = `/project/webscrape/${id}`
+    const config = {
+      type: "DELETE"
+    }
+    return axios(url, config);
+  };
 }
 
 

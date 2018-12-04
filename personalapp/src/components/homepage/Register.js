@@ -9,14 +9,18 @@ class Register extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      firstName: "",
+      lastName: "",
+      genreId: "",
       email: "",
       password: "",
       formErrors: {
         email: "",
         password: "",
-        selectedOption: ""
+        genreId: {}
       },
-      nameValid: false,
+      firstNameValid: false,
+      lastNameValid: false,
       emailValid: false,
       passwordValid: false,
       passwordConfirmValid: false,
@@ -76,14 +80,19 @@ class Register extends Component {
   };
   validateField = (fieldName, value) => {
     let fieldValidationErrors = this.state.formErrors;
-    let nameValid = this.state.nameValid;
+    let firstNameValid = this.state.firstNameValid;
+    let lastNameValid = this.state.lastNameValid;
     let emailValid = this.state.emailValid;
     let passwordValid = this.state.passwordValid;
     let passwordConfirmValid = this.state.passwordConfirmValid;
     switch (fieldName) {
-      case "name":
-        nameValid = value.length > 1;
-        fieldValidationErrors.name = nameValid ? "" : "Must have name";
+      case "firstName":
+        firstNameValid = value.length > 1;
+        fieldValidationErrors.firstName = firstNameValid ? "" : "Must have name";
+        break;
+      case "lastName":
+        lastNameValid = value.length > 1;
+        fieldValidationErrors.lastName = lastNameValid ? "" : "Must have name";
         break;
       case "email":
         emailValid = value.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
@@ -109,7 +118,8 @@ class Register extends Component {
     this.setState(
       {
         formErrors: fieldValidationErrors,
-        nameValid: nameValid,
+        firstNameValid: firstNameValid,
+        lastNameValid: lastNameValid,
         emailValid: emailValid,
         passwordValid: passwordValid,
         passwordConfirmValid: passwordConfirmValid
@@ -121,7 +131,8 @@ class Register extends Component {
   validateForm() {
     this.setState({
       formValid:
-        this.state.nameValid &&
+        this.state.firstNameValid &&
+        this.state.lastNameValid &&
         this.state.emailValid &&
         this.state.passwordValid &&
         this.state.passwordConfirmValid
@@ -129,15 +140,18 @@ class Register extends Component {
   }
 
   handleChange = selectedOption => {
-    this.setState({ selectedOption: selectedOption });
+    this.setState({ genreId: selectedOption });
     console.log(selectedOption);
   };
 
   onClick = () => {
-    const { email, password, passwordConfirm } = this.state;
-    const data = { email: email, password: password, confirmPassword: passwordConfirm }
+    const { firstName, lastName, email, password, passwordConfirm } = this.state;
+    console.log(this.state)
+    const data = { email: email, password: password, confirmPassword: passwordConfirm };
+    const registerData = { FirstName: firstName, LastName: lastName, Email: email, genreId: this.state.genreId.value }
     if (this.state.formValid) {
-      MovieService.loginUser(data, this.onSuccess, this.onError)
+      MovieService.loginUser(data, this.onSuccess, this.onError);
+      MovieService.register(registerData);
     } else {
       this.setState({
         showErrors: true
@@ -154,18 +168,19 @@ class Register extends Component {
 
   render() {
     const options = [
-      { value: 12, label: "Adventure" },
-      { value: 35, label: "Comedy" },
-      { value: 10749, label: "Romance" },
-      { value: 53, label: "Thriller" },
-      { value: 18, label: "Drama" },
-      { value: 28, label: "Action" },
-      { value: 10751, label: "Family" },
-      { value: 878, label: "SciFi" },
-      { value: 16, label: "Animation" }
+      { value: 338952, label: "Adventure" },
+      { value: 454293, label: "Comedy" },
+      { value: 332562, label: "Romance" },
+      { value: 424139, label: "Thriller" },
+      { value: 424694, label: "Drama" },
+      { value: 375588, label: "Action" },
+      { value: 360920, label: "Family" },
+      { value: 335983, label: "Comics" },
+      { value: 351286, label: "SciFi" },
+      { value: 507569, label: "Animation" }
     ];
-    const { selectedOption } = this.state;
-    const value = selectedOption && selectedOption.value;
+    const { genreId } = this.state;
+    const value = genreId && genreId.value;
 
     return (
       <React.Fragment>

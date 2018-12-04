@@ -1,0 +1,11 @@
+.editContainer {
+    background-image: url("https://i.pinimg.com/originals/c8/d7/11/c8d7116d0065e9af076e1f994a4d95ea.jpg");
+    background-size: cover;
+    min-height: 100%;
+    min-width: 100%;
+    position: fixed;
+    max-height: 150px;
+    overflow-y: scroll;
+    top: 0;
+    left: 0;
+}

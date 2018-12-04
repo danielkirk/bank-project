@@ -18,6 +18,10 @@
   color: white;
 }
 
+.App-dimmer {
+  background: rgba(0,0,0, .5);
+}
+
 .App-link {
   color: #61dafb;
 }

@@ -134,5 +134,7 @@ h3 {
 }
 
 .slick-arrow:hover {
-  background-color: rgb(255, 255, 255);
+  opacity: 0.8
 }
+
+

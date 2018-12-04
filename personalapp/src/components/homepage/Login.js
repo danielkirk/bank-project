@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import "./Homepage.css";
 import { getLocation, loginUser } from "../redux/AppActions";
 import { withRouter } from "react-router-dom"
-// import { loginUser } from "../redux/AppActions";
+import { getuser } from "../redux/AppActions";
 
 class Login extends Component {
   constructor(props) {
@@ -15,7 +15,9 @@ class Login extends Component {
     };
   }
 
-  componentDidMount() { }
+  componentDidMount() {
+
+  }
 
   onChange = evt => {
     const key = evt.target.name;

@@ -132,6 +132,7 @@ C:\SF.Code\C61\personal_project\PersonalProject.Web\PersonalProject\bin\System.W
 C:\SF.Code\C61\personal_project\PersonalProject.Web\PersonalProject\bin\System.Diagnostics.DiagnosticSource.xml
 C:\SF.Code\C61\personal_project\PersonalProject.Web\PersonalProject\bin\Microsoft.AspNet.TelemetryCorrelation.xml
 C:\SF.Code\C61\personal_project\PersonalProject.Web\PersonalProject\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\SF.Code\C61\personal_project\PersonalProject.Web\PersonalProject\obj\Debug\PersonalProject.csprojAssemblyReference.cache
 C:\SF.Code\C61\personal_project\PersonalProject.Web\PersonalProject\obj\Debug\PersonalProject.csproj.CoreCompileInputs.cache
 C:\SF.Code\C61\personal_project\PersonalProject.Web\PersonalProject\obj\Debug\PersonalProject.csproj.CopyComplete
 C:\SF.Code\C61\personal_project\PersonalProject.Web\PersonalProject\obj\Debug\PersonalProject.dll

@@ -2,7 +2,8 @@ const AppReducer = (
   state = {
     currentLocation: {},
     isLoggedIn: false,
-    currentMovies: []
+    currentMovies: [],
+    userinfo: {}
   },
   action
 ) => {
@@ -12,6 +13,12 @@ const AppReducer = (
         ...state,
         currentLocation: action.payload
       };
+      break;
+    case "GET_USER_FULFILLED":
+      state = {
+        ...state,
+        userinfo: action.payload
+      }
       break;
     case "LOGIN_USER_FULFILLED":
       state = {

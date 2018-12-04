@@ -4,7 +4,8 @@ import { connect } from "react-redux";
 import Slider from "react-slick";
 import "./Layout.css";
 import { moviesIntheatres, movieTrailers } from "../redux/AppActions";
-import ModalVideo from "react-modal-video"
+import ModalVideo from "react-modal-video";
+import { Link } from "react-router-dom"
 
 class MoviePage extends React.Component {
   constructor(props) {
@@ -20,10 +21,6 @@ class MoviePage extends React.Component {
     this.props.currentMovies();
     this.props.currentTrailers();
     console.log(this.props.location);
-    // const movies = await MovieService.getcurrentmovies();
-    // this.setState({ movieArray: this.state.movieArray.concat(movies.data) })
-    // const trailers = await MovieService.getmovietrailers();
-    // this.setState({ trailers: trailers.data })
     const currentMovies = await MovieService.apigetcurrentmovie();
     this.setState({ movieArray: currentMovies.data.results })
     console.log(this.state)
@@ -46,11 +43,14 @@ class MoviePage extends React.Component {
   render() {
     const settings = {
       dots: false,
-      arrows: false,
+      arrows: true,
       infinite: true,
-      autoplay: true,
+      autoplay: false,
+      adaptiveHeight: true,
+      focusOnSelect: true,
       autoplayspeed: 5000,
-      speed: 10,
+      speed: 1,
+      centerMode: true,
       slidesToShow: 5,
       slidesToScroll: 1,
       swipeToSlide: true,
@@ -60,17 +60,19 @@ class MoviePage extends React.Component {
     return (
 
       <div className="container movieBackground">
+
         <div style={{ paddingTop: "20px" }}>
           <ModalVideo channel="youtube" isOpen={this.state.isOpen} videoId={this.state.trailers.key ? this.state.trailers.key : ""} onClose={() => this.setState({ isOpen: false })} />
           <Slider {...settings}>
             {this.state.movieArray.map((movie, index) => {
               return (
-                <div key={index}>
-                  <div key={index} className="container itemsContainer" >
+                <div className="pt-5" key={index}>
+                  <div key={index} className="container itemsContainer mb-5" >
                     <img id={movie.id} onClick={this.onClick} src={` http://image.tmdb.org/t/p/w185${movie.poster_path}`} alt="" style={{ height: "33vh", width: " 12vw" }} />
                     <br />
+                    <br />
                   </div>
-                  <p style={{ color: "white", height: "50px", width: "12vw" }}>{movie.Title}</p>
+                  <p style={{ color: "white", width: "12vw" }}>{movie.title}</p>
                 </div>)
 
             })}

@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { Route, Switch } from "react-router-dom";
 import { withRouter } from "react-router-dom";
-import { checkUser } from "./components/redux/AppActions"
+import { checkUser, getuser, getLocation } from "./components/redux/AppActions"
 import {
   Collapse,
   Navbar,
@@ -17,6 +17,7 @@ import {
   NavLink,
 
 } from 'reactstrap';
+import UserPage from "./components/InnerLayout/UserPage"
 import MoviePage from "./components/InnerLayout/MoviePage";
 
 class App extends Component {
@@ -29,10 +30,14 @@ class App extends Component {
   componentDidMount() {
     const token = sessionStorage.getItem("token")
     this.props.setUserStatus(token);
+    const id = sessionStorage.getItem("userId")
+    this.props.getUser(id);
+    this.props.getUserLocation();
+
   }
 
   onpickerClick = () => {
-    this.props.history.push("/moviepicker")
+    this.props.history.push("/userinfo")
   }
 
   onmovieClick = () => {
@@ -55,7 +60,7 @@ class App extends Component {
 
   render() {
     return (
-      <div className="App">
+      <div className="App App-dimmer">
         {!this.props.user.isLoggedIn && (
           <Route
             render={({ location }) => (
@@ -76,32 +81,37 @@ class App extends Component {
               </TransitionGroup>
             )}
           />
-        )}
-        {this.props.user.isLoggedIn && <div>
-          <Route path="/" component={MoviePage} />
-          <Navbar color="black" dark expand="lg">
-            <NavbarBrand style={{ color: "white" }} onClick={this.homeClick} href="#">Movie Matchmaking</NavbarBrand>
-            <NavbarToggler onClick={this.toggle} />
-            <Collapse isOpen={this.state.isOpen} navbar>
-              <Nav className="ml-auto" tabs>
-                <NavItem>
-                  <NavLink style={{ color: "white" }} onClick={this.onpickerClick} href="#">Recommended Movies For You</NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink style={{ color: "white" }} onClick={this.onmovieClick} href="#">Movie Night Randomizer</NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink style={{ color: "white" }} onClick={this.onpickerClick} href="#">Profile Settings</NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink style={{ color: "red" }} onClick={this.onlogoutClick} href="/login">Logout</NavLink>
-                </NavItem>
-              </Nav>
-            </Collapse>
-          </Navbar>
+        )
+        }
+        {
+          this.props.user.isLoggedIn && <div>
+            <Route exact path="/" component={MoviePage} />
+            <Route path="/userinfo" component={UserPage} />
+            <Route exact path="/userinfo/:id" component={UserPage} />
+            <Navbar color="black" dark expand="lg">
+              <NavbarBrand style={{ color: "white" }} onClick={this.homeClick} href="#">Movie App</NavbarBrand>
+              <NavbarToggler onClick={this.toggle} />
+              <Collapse isOpen={this.state.isOpen} navbar>
+                <Nav className="ml-auto" tabs>
+                  <NavItem>
+                    <NavLink style={{ color: "white" }} onClick={this.onrecommendedClick} href="#">Recommended Movies For You</NavLink>
+                  </NavItem>
+                  <NavItem>
+                    <NavLink style={{ color: "white" }} onClick={this.onmovieClick} href="#">Movie Night Randomizer</NavLink>
+                  </NavItem>
+                  <NavItem>
+                    <NavLink style={{ color: "white" }} onClick={this.onpickerClick} href="#">User Settings</NavLink>
+                  </NavItem>
+                  <NavItem>
+                    <NavLink style={{ color: "red" }} onClick={this.onlogoutClick} href="/login">Logout</NavLink>
+                  </NavItem>
+                </Nav>
+              </Collapse>
+            </Navbar>
 
-        </div>}
-      </div>
+          </div>
+        }
+      </div >
     );
   }
 }
@@ -116,6 +126,12 @@ const mapDispatchToProps = dispatch => {
   return {
     setUserStatus: (token) => {
       dispatch(checkUser(token))
+    },
+    getUser: (id) => {
+      dispatch(getuser(id))
+    },
+    getUserLocation: () => {
+      dispatch(getLocation());
     }
   }
 }
