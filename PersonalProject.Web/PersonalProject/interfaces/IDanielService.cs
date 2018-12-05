@@ -16,5 +16,9 @@ namespace PersonalProject.interfaces
         UsersModel GetById(int id);
         int Update(UsersModel model);
         void Delete(int id);
+        object CreateJoin(AspJoinModel model);
+        AspEmail GetByAspId(string AspId);
+        void DeleteUserJoin(string AspId, int Id);
+        AspIdModel SelectByAspId(string AspId);
     }
 }

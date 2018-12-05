@@ -111,12 +111,12 @@ namespace PersonalProject.Controllers
         }
 
         [HttpDelete]
-        [Route("{id:int}")]
-        public HttpResponseMessage Delete(int id)
+        [Route("delete")]
+        public HttpResponseMessage DeleteUserJoin(string AspId,int id)
         {
             try
             {
-                danielService.Delete(id);
+                danielService.DeleteUserJoin(AspId, id);
                 SuccessResponse resp = new SuccessResponse();
                 return Request.CreateResponse(HttpStatusCode.OK, resp);
             }
@@ -125,5 +125,57 @@ namespace PersonalProject.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
             }
         }
+
+        [HttpPost]
+        [Route("createuserjoin")]
+        public HttpResponseMessage CreateJoin(AspJoinModel model)
+        {
+            if(ModelState.IsValid)
+            {
+                danielService.CreateJoin(model);
+                ItemResponse<object> resp = new ItemResponse<object>();
+                resp.Item = model;
+
+                return Request.CreateResponse(HttpStatusCode.OK, resp);
+            }
+            else
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+            }
+        }
+
+        [HttpGet]
+        [Route("aspid")]
+        public HttpResponseMessage GetByAspId(string Email)
+        {
+            try
+            {
+                ItemResponse<AspEmail> resp = new ItemResponse<AspEmail>();
+                resp.Item = danielService.GetByAspId(Email);
+                return Request.CreateResponse(HttpStatusCode.OK, resp);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+            }
+
+        }
+
+        [HttpGet]
+        [Route("user")]
+        public HttpResponseMessage GetSelectByAspId(string AspId)
+        {
+            try
+            {
+                ItemResponse<AspIdModel> resp = new ItemResponse<AspIdModel>();
+                resp.Item = danielService.SelectByAspId(AspId);
+                return Request.CreateResponse(HttpStatusCode.OK, resp);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+            }
+        }
+        
     }
 }

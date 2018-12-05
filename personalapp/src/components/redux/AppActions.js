@@ -24,7 +24,9 @@ export function loginUser(username, password) {
       .post("/token", data, { headers: headers, withCredentials: true })
       .then(resp => {
         sessionStorage.setItem("token", resp.data.access_token)
-        return true;
+        sessionStorage.setItem("email", resp.data.userName)
+        console.log(resp.data)
+        return { response: true, data: resp.data };
       })
       .catch(err => console.error(err))
   };
@@ -78,6 +80,44 @@ export function getuser(id) {
     payload: axios.get(`/project/webscrape/${id}`, { withCredentials: true })
       .then(resp => {
         console.log(resp.data)
+        return resp.data.Item
+      })
+      .catch(error => console.log(error))
+  }
+}
+
+export function getaspid(email) {
+  return {
+    type: "GET_ASP",
+    payload: axios.get(`/project/webscrape/aspid?email=${email}`, { withCredentials: true })
+      .then(resp => {
+        sessionStorage.setItem("ASPId", resp.data.Item.AspId)
+        console.log(resp.data.Item)
+        return resp.data.Item.AspId
+      })
+      .catch(error => console.log(error))
+  }
+}
+
+export function getUserId(aspId) {
+  return {
+    type: "GET_ID",
+    payload: axios.get(`/project/webscrape/user?aspid=${aspId}`, { withCredentials: true })
+      .then(resp => {
+        console.log(resp.data.Item.AspId)
+        return resp.data.Item.AspId
+      })
+      .catch(error => console.log(error))
+  }
+}
+
+export function register(data) {
+  return {
+    type: "REGISTER_USER",
+    payload: axios.post("/project/webscrape", data, { withCredentials: true })
+      .then(resp => {
+        console.log(resp.data.Item)
+        sessionStorage.setItem("userId", resp.data.Item)
         return resp.data.Item
       })
       .catch(error => console.log(error))

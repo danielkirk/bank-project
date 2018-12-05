@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import RegisterationDos from "../homepage/RegistrationDos";
+import RegistrationDos from "../homepage/RegistrationDos";
 import { connect } from "react-redux";
 import "./UserPage.css"
 import MovieService from '../Services/MovieService';
+import SweetAlert from "react-bootstrap-sweetalert"
 
 class UserPage extends Component {
     constructor(props) {
@@ -17,18 +18,19 @@ class UserPage extends Component {
                 password: "",
                 genreId: {}
             },
-            firstNameValid: false,
-            lastNameValid: false,
-            emailValid: false,
-            passwordValid: false,
-            passwordConfirmValid: false,
-            showErrors: false
+            firstNameValid: true,
+            lastNameValid: true,
+            emailValid: true,
+            passwordValid: true,
+            passwordConfirmValid: true,
+            showErrors: true,
+            show: false,
+            showDelete: false
         }
     }
 
     async componentDidMount() {
-        console.log(this.props)
-        const id = sessionStorage.getItem("userId")
+        const id = this.props.App.userId ? this.props.App.userId : sessionStorage.getItem("userId")
         this.setState({ userId: id })
         const movies = await MovieService.getbyid(id)
         console.log(movies.data.Item)
@@ -88,9 +90,7 @@ class UserPage extends Component {
     validateForm() {
         this.setState({
             formValid:
-                this.state.firstNameValid &&
-                this.state.lastNameValid &&
-                this.state.emailValid
+                true
         });
     }
 
@@ -99,18 +99,40 @@ class UserPage extends Component {
         console.log(selectedOption);
     };
 
-    onClick = async () => {
-        const { firstName, lastName, email } = this.state
-        const registerData = { FirstName: firstName, LastName: lastName, Email: email, genreId: this.state.genreId.value }
-        if (this.state.formValid) {
-            await MovieService.update(this.state.userId, registerData)
-                .then(this.history.push("/"));
-        } else {
-            this.setState({
-                showErrors: true
-            });
-        }
+    onClick = () => {
+        const { userId, firstName, lastName, email } = this.state
+        const registerData = { Id: userId, firstName: firstName, lastName: lastName, email: email, genreId: this.state.genreId.value }
+        console.log(registerData)
+        console.log(userId)
+        MovieService.update(userId, registerData)
+        this.setState({
+            show: true
+        })
     };
+
+    deleteClick = () => {
+        this.setState({ showDelete: true })
+        const { userId } = this.state;
+        const AspId = this.props.App.aspId;
+        console.log(userId, AspId)
+    }
+
+    confirmDelete = async () => {
+        const { userId } = this.state;
+        const AspId = this.props.App.aspId;
+        console.log(userId, AspId)
+        await MovieService.delete(AspId, userId)
+        sessionStorage.removeItem("token");
+        this.setState({ showDelete: false }, () => window.location.replace("http://localhost:3000/"))
+
+    }
+
+    cancelBack = () => {
+        this.setState({
+            show: false,
+            showDelete: false
+        })
+    }
 
     render() {
         const options = [
@@ -119,16 +141,41 @@ class UserPage extends Component {
             { value: 332562, label: "Romance" },
             { value: 424139, label: "Thriller" },
             { value: 424694, label: "Drama" },
-            { value: 375588, label: "Action" },
+            { value: 335983, label: "Action" },
             { value: 360920, label: "Family" },
-            { value: 335983, label: "Comics" },
             { value: 351286, label: "SciFi" },
-            { value: 507569, label: "Animation" }
         ];
         const { genreId } = this.state;
         const value = genreId && genreId.value;
         return (
             <div className="editContainer">
+                <SweetAlert
+                    success
+                    show={this.state.show}
+                    allowEscape={true}
+                    closeOnClickOutside={true}
+                    confirmBtnText="Dope!"
+                    confirmBtnBsStyle="primary"
+                    title="User info updated"
+                    onConfirm={this.cancelBack}
+                >
+                    Your User info has been updated!
+                </SweetAlert>
+                <SweetAlert
+                    danger
+                    showCancel
+                    show={this.state.showDelete}
+                    allowEscape={true}
+                    closeOnClickOutside={true}
+                    confirmBtnText="Not Dope..."
+                    confirmBtnBsStyle="danger"
+                    title="Deactivate Account"
+                    cancelBtnBsStyle="default"
+                    onConfirm={this.confirmDelete}
+                    onCancel={this.cancelBack}
+                >
+                    You are going to deactivate this account, and will be logged out.
+      </SweetAlert>
                 <div
                     className="d-flex justify-content-center align-items-center"
                     style={{ height: "100vh" }}
@@ -158,13 +205,14 @@ class UserPage extends Component {
                                             <div className="card-body">
                                                 <div className="d-flex justify-content-center align-items-center pb-2 mb-4" />
                                                 <form >
-                                                    <RegisterationDos
+                                                    <RegistrationDos
                                                         {...this.state}
                                                         onChange={this.onChange}
                                                         onClick={this.onClick}
                                                         options={options}
                                                         value={value}
                                                         handleChange={this.handleChange}
+                                                        deleteClick={this.deleteClick}
                                                     />
                                                 </form>
                                             </div>

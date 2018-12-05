@@ -3,7 +3,7 @@ import MovieService from "../Services/MovieService";
 import { connect } from "react-redux";
 import Slider from "react-slick";
 import "./Layout.css";
-import { moviesIntheatres, movieTrailers } from "../redux/AppActions";
+import { moviesIntheatres, movieTrailers, getaspid, getUserId } from "../redux/AppActions";
 import ModalVideo from "react-modal-video";
 import { Link } from "react-router-dom"
 
@@ -23,7 +23,9 @@ class MoviePage extends React.Component {
     console.log(this.props.location);
     const currentMovies = await MovieService.apigetcurrentmovie();
     this.setState({ movieArray: currentMovies.data.results })
-    console.log(this.state)
+    console.log(this.state);
+    const email = sessionStorage.getItem("email")
+    this.props.getAsp(email);
   }
 
   onClick = evt => {
@@ -50,18 +52,18 @@ class MoviePage extends React.Component {
       focusOnSelect: true,
       autoplayspeed: 5000,
       speed: 1,
-      centerMode: true,
+      centerMode: false,
       slidesToShow: 5,
       slidesToScroll: 1,
       swipeToSlide: true,
-      center: true,
+      center: false,
       rows: 2
     };
     return (
 
       <div className="container movieBackground">
-
         <div style={{ paddingTop: "20px" }}>
+          <h3>Movies Currently Out</h3>
           <ModalVideo channel="youtube" isOpen={this.state.isOpen} videoId={this.state.trailers.key ? this.state.trailers.key : ""} onClose={() => this.setState({ isOpen: false })} />
           <Slider {...settings}>
             {this.state.movieArray.map((movie, index) => {
@@ -96,6 +98,13 @@ const mapDispatchToProps = dispatch => {
     },
     currentTrailers: () => {
       dispatch(movieTrailers())
+    },
+    getAsp: (email) => {
+      dispatch(getaspid(email))
+        .then(resp => {
+          console.log(resp)
+          dispatch(getUserId(resp.action.payload))
+        })
     }
   }
 }

@@ -3,17 +3,25 @@ const AppReducer = (
     currentLocation: {},
     isLoggedIn: false,
     currentMovies: [],
-    userinfo: {}
+    userinfo: {},
+    aspId: "",
+    userId: ""
   },
   action
 ) => {
   switch (action.type) {
+
     case "GET_LOCATION_FULFILLED":
       state = {
         ...state,
         currentLocation: action.payload
       };
       break;
+    case "REGISTER_USER_FULFILLED":
+      state = {
+        ...state,
+        userId: action.payload
+      }
     case "GET_USER_FULFILLED":
       state = {
         ...state,
@@ -23,7 +31,8 @@ const AppReducer = (
     case "LOGIN_USER_FULFILLED":
       state = {
         ...state,
-        isLoggedIn: action.payload
+        isLoggedIn: action.payload.response,
+        userinfo: action.payload.data
       };
       break;
     case "CHECK_USER_FULFILLED":
@@ -42,6 +51,17 @@ const AppReducer = (
       state = {
         ...state,
         movieTrailers: action.payload
+      }
+      break;
+    case "GET_ASP_FULFILLED":
+      state = {
+        ...state,
+        aspId: action.payload
+      }
+      break;
+    case "GET_ID_FULFILLED":
+      state = {
+        ...state
       }
       break;
     default:

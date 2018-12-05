@@ -23,7 +23,7 @@ namespace PersonalProject.Services
         public object ScrapeTrailer(URLmodel model)
         {
             var TrailerList = new List<TrailerModel>();
-            var url = "https://www.imdb.com/movies-in-theaters/?ref_=cs_inth";
+            var url = "https://www.imdb.com/movies-coming-soon/?ref_=inth_cs";
 
             var web = new HtmlWeb();
             var htmlDoc = web.Load(url);
@@ -47,7 +47,7 @@ namespace PersonalProject.Services
         public object ScrapeWeb(URLmodel model)
         {
             var WebList = new List<WebModel>();
-            var url = "https://www.imdb.com/movies-in-theaters/?ref_=cs_inth";
+            var url = "https://www.imdb.com/movies-coming-soon/?ref_=inth_cs";
 
             var web = new HtmlWeb();
             var htmlDoc = web.Load(url);
@@ -63,21 +63,23 @@ namespace PersonalProject.Services
             return (WebList);
         }
 
-        public object ScrapeTickets(URLmodel model)
+        public object ScrapeWebCurrent(URLmodel model)
         {
-            var TicketList = new List<TicketModel>();
+            var WebList = new List<WebModel>();
             var url = "https://www.imdb.com/movies-in-theaters/?ref_=cs_inth";
+
             var web = new HtmlWeb();
             var htmlDoc = web.Load(url);
-            var Ticket = htmlDoc.DocumentNode.SelectNodes("//*[@id='main']/div/div/div/table/tbody/tr/td/a[2]");
-            var BoxOffice = htmlDoc.DocumentNode.SelectNodes("//*[@id='main']/div/div/div/table/tbody/tr/td/div[5]");
-            foreach (var node in Ticket.Zip(BoxOffice, (t, b) => new TicketModel
-            { TicketUrl = t.GetAttributeValue("href", ""), BoxOffice = b.InnerText }))
-            {
-                TicketList.Add(node);
+            var Title = htmlDoc.DocumentNode.SelectNodes("//*[@id='main']/div/div/div/table/tbody/tr/td/h4/a");
+            var Image = htmlDoc.DocumentNode.SelectNodes("//*[@id='img_primary']/div/a/div/img");
 
+            foreach (var node in Title.Zip(Image, (t, i) => new WebModel
+            { Title = t.InnerText, Image = i.GetAttributeValue("src", "") }))
+            {
+                WebList.Add(node);
+                Console.WriteLine(node);
             }
-            return (TicketList);
+            return (WebList);
         }
 
         public int Create(UsersAddRequest model)
@@ -104,6 +106,46 @@ namespace PersonalProject.Services
                 });
 
             return id;
+        }
+           
+        public object CreateJoin(AspJoinModel model)
+        {
+            this._dataProvider.ExecuteNonQuery(
+                "UserJoin_Insert",
+                inputParamMapper: delegate (SqlParameterCollection paramList)
+                {
+                    paramList.AddWithValue("@AspId", model.AspId);
+                    paramList.AddWithValue("UsersId", model.UsersId);
+                });
+            return model;
+        }
+
+        public AspEmail GetByAspId(string Email)
+        {
+            AspEmail model = new AspEmail();
+            this._dataProvider.ExecuteCmd(
+                "AspNetUsers_SelectByUserName",
+                inputParamMapper: delegate (SqlParameterCollection paramList)
+                {
+                    paramList.AddWithValue("@UserName", Email);
+                },
+                singleRecordMapper: delegate (IDataReader reader, short set)
+                {
+                    int idx = 0;
+                    model.AspId = reader.GetString(idx);
+                });
+            return model;
+        }
+
+        public void DeleteUserJoin(string AspId, int UsersId)
+        {
+            this._dataProvider.ExecuteNonQuery(
+                "UserJoin_Delete",
+                inputParamMapper: delegate (SqlParameterCollection paramList)
+                {
+                    paramList.AddWithValue("@AspId", AspId);
+                    paramList.AddWithValue("@UsersId", UsersId);
+                });
         }
 
         public UsersModel GetById(int id)
@@ -153,6 +195,24 @@ namespace PersonalProject.Services
                     id = (int)paramList["@Id"].Value;
                 });
             return id;
+        }
+
+        public AspIdModel SelectByAspId(string AspId)
+        {
+            AspIdModel model = new AspIdModel();
+            this._dataProvider.ExecuteCmd(
+                "UserJoin_SelectByAspId",
+                inputParamMapper: delegate (SqlParameterCollection paramList)
+                {
+                    paramList.AddWithValue("@AspId", AspId);
+                },
+                singleRecordMapper: delegate (IDataReader reader, short set)
+                {
+                    int idx = 0;
+                    model.AspId = reader.GetInt32(idx);
+                });
+            return model;
+
         }
 
         public void Delete(int id)

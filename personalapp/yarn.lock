@@ -7080,6 +7080,10 @@ react-slick@^0.23.2:
     prettier "^1.14.3"
     resize-observer-polyfill "^1.5.0"
 
+react-slot-machine@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/react-slot-machine/-/react-slot-machine-1.0.0.tgz#a1cc0aa7b6c8c5fa79fd5dc66208c2a8ef410b01"
+
 react-transition-group@^2.2.1, react-transition-group@^2.3.1, react-transition-group@^2.5.0:
   version "2.5.0"
   resolved "https://registry.yarnpkg.com/react-transition-group/-/react-transition-group-2.5.0.tgz#70bca0e3546102c4dc5cf3f5f57f73447cce6874"

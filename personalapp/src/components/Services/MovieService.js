@@ -18,6 +18,14 @@ class MovieService extends React.Component {
     return axios(url, config)
   }
 
+  static getRecommendations(genre) {
+    const url = `https://api.themoviedb.org/3/movie/${genre}/recommendations?api_key=ecb01088d60b983e89731fa1e9b3ad7d&language=en-US&page=1`
+    const config = {
+      type: "GET"
+    }
+    return axios(url, config)
+  }
+
   static getmovietrailers() {
     const url = `/project/webscrape/Trailer`
     const config = {
@@ -55,22 +63,10 @@ class MovieService extends React.Component {
     return axios(url, config)
   }
 
-  static register(data) {
-    return {
-      type: "POST",
-      payload: axios.post("/project/webscrape", data, { withCredentials: true })
-        .then(resp => {
-          sessionStorage.setItem("userId", resp.data.Item);
-          console.log(resp.data.Item)
-        })
-        .catch(error => console.log(error))
-    }
-  }
-
   static getbyid(id) {
     const url = `/project/webscrape/${id}`;
     const config = {
-      type: "GET"
+      method: "GET"
     }
     return axios(url, config)
   }
@@ -78,20 +74,30 @@ class MovieService extends React.Component {
   static update(id, data) {
     const url = `/project/webscrape/${id}`;
     const config = {
-      type: "PUT",
+      method: "PUT",
       data: data
     }
     return axios(url, config)
   }
 
-  static delete(id) {
-    const url = `/project/webscrape/${id}`
+  static delete(aspid, id) {
+    const url = `/project/webscrape/delete?aspid=${aspid}&&id=${id}`
     const config = {
-      type: "DELETE"
+      method: "DELETE"
     }
     return axios(url, config);
   };
+
+  static joinUser(data) {
+    const url = `http://PersonalProject.Test/project/webscrape/createuserjoin`;
+    const config = {
+      type: "POST",
+      data: data
+    }
+    return axios(url, config)
+  }
 }
+
 
 
 export default MovieService;

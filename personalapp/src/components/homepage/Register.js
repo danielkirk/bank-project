@@ -3,6 +3,7 @@ import RegisterForm from "./RegisterForm";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import MovieService from "../Services/MovieService"
+import { register } from "../redux/AppActions"
 import "./Homepage.css";
 
 class Register extends Component {
@@ -151,7 +152,7 @@ class Register extends Component {
     const registerData = { FirstName: firstName, LastName: lastName, Email: email, genreId: this.state.genreId.value }
     if (this.state.formValid) {
       MovieService.loginUser(data, this.onSuccess, this.onError);
-      MovieService.register(registerData);
+      this.props.registerUser(registerData);
     } else {
       this.setState({
         showErrors: true
@@ -173,11 +174,9 @@ class Register extends Component {
       { value: 332562, label: "Romance" },
       { value: 424139, label: "Thriller" },
       { value: 424694, label: "Drama" },
-      { value: 375588, label: "Action" },
+      { value: 335983, label: "Action" },
       { value: 360920, label: "Family" },
-      { value: 335983, label: "Comics" },
       { value: 351286, label: "SciFi" },
-      { value: 507569, label: "Animation" }
     ];
     const { genreId } = this.state;
     const value = genreId && genreId.value;
@@ -258,4 +257,11 @@ const mapStateToProps = state => {
   return { location: state.AppReducer };
 };
 
-export default connect(mapStateToProps)(Register);
+const mapDispatchToProps = dispatch => {
+  return {
+    registerUser: (data) => {
+      dispatch(register(data))
+    }
+  }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(Register);

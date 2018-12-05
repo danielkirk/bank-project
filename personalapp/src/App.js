@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { Route, Switch } from "react-router-dom";
 import { withRouter } from "react-router-dom";
-import { checkUser, getuser, getLocation } from "./components/redux/AppActions"
+import { checkUser, getuser, getLocation, getaspid, getUserId } from "./components/redux/AppActions"
 import {
   Collapse,
   Navbar,
@@ -17,8 +17,11 @@ import {
   NavLink,
 
 } from 'reactstrap';
+import MovieRandomizer from "./components/InnerLayout/MovieRandomizer"
 import UserPage from "./components/InnerLayout/UserPage"
 import MoviePage from "./components/InnerLayout/MoviePage";
+import RecommendedMovies from "./components/InnerLayout/RecommendedMovies";
+import HomePage from "./components/InnerLayout/HomePage"
 
 class App extends Component {
   constructor(props) {
@@ -48,8 +51,16 @@ class App extends Component {
     this.props.history.push("/")
   }
 
+  onrecommendedClick = () => {
+    this.props.history.push("/recommended")
+  }
+
   onlogoutClick = () => {
     sessionStorage.removeItem("token")
+  }
+
+  onCurrentClick = () => {
+    this.props.history.push("/current")
   }
 
   toggle = () => {
@@ -85,19 +96,25 @@ class App extends Component {
         }
         {
           this.props.user.isLoggedIn && <div>
-            <Route exact path="/" component={MoviePage} />
+            <Route exact path="/" component={HomePage} />
+            <Route exact path="/current" component={MoviePage} />
             <Route path="/userinfo" component={UserPage} />
             <Route exact path="/userinfo/:id" component={UserPage} />
+            <Route exact path="/movienight" component={MovieRandomizer} />
+            <Route exact path="/recommended" component={RecommendedMovies} />
             <Navbar color="black" dark expand="lg">
               <NavbarBrand style={{ color: "white" }} onClick={this.homeClick} href="#">Movie App</NavbarBrand>
               <NavbarToggler onClick={this.toggle} />
               <Collapse isOpen={this.state.isOpen} navbar>
                 <Nav className="ml-auto" tabs>
                   <NavItem>
+                    <NavLink style={{ color: "white" }} onClick={this.onCurrentClick} href="#">Current Movies Out</NavLink>
+                  </NavItem>
+                  <NavItem>
                     <NavLink style={{ color: "white" }} onClick={this.onrecommendedClick} href="#">Recommended Movies For You</NavLink>
                   </NavItem>
                   <NavItem>
-                    <NavLink style={{ color: "white" }} onClick={this.onmovieClick} href="#">Movie Night Randomizer</NavLink>
+                    <NavLink style={{ color: "white" }} onClick={this.onmovieClick} href="#">Upcoming Movies</NavLink>
                   </NavItem>
                   <NavItem>
                     <NavLink style={{ color: "white" }} onClick={this.onpickerClick} href="#">User Settings</NavLink>
@@ -132,6 +149,12 @@ const mapDispatchToProps = dispatch => {
     },
     getUserLocation: () => {
       dispatch(getLocation());
+    },
+    getAsp: (email) => {
+      dispatch(getaspid(email))
+        .then(resp => {
+          dispatch(getUserId(resp.action.payload))
+        })
     }
   }
 }

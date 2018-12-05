@@ -48,10 +48,17 @@ const RegisterDos = props => {
             </div>
             <button
                 type="button"
-                className="btn btn-danger btn-block mt-4"
+                className="btn btn-primary btn-block mt-4"
                 onClick={props.onClick}
             >
-                <span style={{ color: "gold" }}>Update</span>
+                <span style={{ color: "gold" }} onClick={props.onClick}>Update</span>
+            </button>
+            <button
+                type="button"
+                className="btn btn-danger btn-block mt-4"
+                onClick={props.deleteClick}
+            >
+                <span style={{ color: "gold" }} onClick={props.deleteClick}>Deactivate Account</span>
             </button>
         </React.Fragment>
     );
