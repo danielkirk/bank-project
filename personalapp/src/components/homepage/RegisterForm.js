@@ -39,9 +39,9 @@ const RegisterForm = props => {
         invalidText="Must have a valid email"
       />
       <div className="form-group">
-        <h6 style={{ color: "whitesmoke" }}> Genre preferences</h6>
+        <h6 style={{ color: "whitesmoke" }}> Genre preference</h6>
         <Select
-          name="gender"
+          name="genre"
           isMulti={false}
           multi={true}
           options={props.options}

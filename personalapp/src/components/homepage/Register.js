@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import RegisterForm from "./RegisterForm";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-import MovieService from "../Services/MovieService"
-import { register } from "../redux/AppActions"
+import MovieService from "../Services/MovieService";
+import { register } from "../redux/AppActions";
 import "./Homepage.css";
 
 class Register extends Component {
@@ -58,7 +58,7 @@ class Register extends Component {
     const coordinates = pos.coords;
     console.log(
       `Your current position is: ${coordinates.latitude}, ${
-      coordinates.longitude
+        coordinates.longitude
       }`
     );
   };
@@ -89,7 +89,9 @@ class Register extends Component {
     switch (fieldName) {
       case "firstName":
         firstNameValid = value.length > 1;
-        fieldValidationErrors.firstName = firstNameValid ? "" : "Must have name";
+        fieldValidationErrors.firstName = firstNameValid
+          ? ""
+          : "Must have name";
         break;
       case "lastName":
         lastNameValid = value.length > 1;
@@ -146,10 +148,25 @@ class Register extends Component {
   };
 
   onClick = () => {
-    const { firstName, lastName, email, password, passwordConfirm } = this.state;
-    console.log(this.state)
-    const data = { email: email, password: password, confirmPassword: passwordConfirm };
-    const registerData = { FirstName: firstName, LastName: lastName, Email: email, genreId: this.state.genreId.value }
+    const {
+      firstName,
+      lastName,
+      email,
+      password,
+      passwordConfirm
+    } = this.state;
+    console.log(this.state);
+    const data = {
+      email: email,
+      password: password,
+      confirmPassword: passwordConfirm
+    };
+    const registerData = {
+      FirstName: firstName,
+      LastName: lastName,
+      Email: email,
+      genreId: this.state.genreId.value
+    };
     if (this.state.formValid) {
       MovieService.loginUser(data, this.onSuccess, this.onError);
       this.props.registerUser(registerData);
@@ -160,9 +177,9 @@ class Register extends Component {
     }
   };
 
-  onError = error => console.log(error)
+  onError = error => console.log(error);
 
-  onSuccess = (resp) => {
+  onSuccess = resp => {
     console.log(resp);
     this.props.history.push("./login");
   };
@@ -175,8 +192,8 @@ class Register extends Component {
       { value: 424139, label: "Thriller" },
       { value: 424694, label: "Drama" },
       { value: 335983, label: "Action" },
-      { value: 360920, label: "Family" },
-      { value: 351286, label: "SciFi" },
+      { value: 254470, label: "Family" },
+      { value: 351286, label: "SciFi" }
     ];
     const { genreId } = this.state;
     const value = genreId && genreId.value;
@@ -259,9 +276,12 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    registerUser: (data) => {
-      dispatch(register(data))
+    registerUser: data => {
+      dispatch(register(data));
     }
-  }
-}
-export default connect(mapStateToProps, mapDispatchToProps)(Register);
+  };
+};
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Register);

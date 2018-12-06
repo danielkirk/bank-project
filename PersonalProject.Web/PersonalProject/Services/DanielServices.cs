@@ -63,6 +63,26 @@ namespace PersonalProject.Services
             return (WebList);
         }
 
+        public object ScrapeTickets(URLmodel model)
+        {
+            var WebList = new List<WebModel>();
+            var url = "https://www.imdb.com/movies-in-theaters/?ref_=cs_inth";
+
+            var web = new HtmlWeb();
+            var htmlDoc = web.Load(url);
+            var Title = htmlDoc.DocumentNode.SelectNodes("//*[@id='main']/div/div/div/table/tbody/tr/td/h4/a");
+            var Image = htmlDoc.DocumentNode.SelectNodes("//*[@id='img_primary']/div/a/div/img");
+
+            foreach (var node in Title.Zip(Image, (t, i) => new WebModel
+            { Title = t.InnerText, Image = i.GetAttributeValue("src", "") }))
+            {
+                WebList.Add(node);
+                Console.WriteLine(node);
+            }
+            return (WebList);
+        }
+
+
         public object ScrapeWebCurrent(URLmodel model)
         {
             var WebList = new List<WebModel>();
