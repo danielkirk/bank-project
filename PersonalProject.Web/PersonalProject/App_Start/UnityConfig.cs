@@ -26,12 +26,11 @@ namespace PersonalProject
 
             // e.g. container.RegisterType<ITestService, TestService>();
 
-            container.RegisterType<IDataProvider, SqlDataProvider>(
+            container.RegisterType<IDataProvider,SqlDataProvider>(
                new InjectionConstructor(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString));
 
             container.RegisterType<IUserStore<ApplicationUser>, UserStore<ApplicationUser>>();
             container.RegisterType<AccountController>(new InjectionConstructor());
-            container.RegisterType<IDanielService, DanielServices>();
             container.RegisterType<IBankServices, BankServices>();
 
             GlobalConfiguration.Configuration.DependencyResolver = new UnityDependencyResolver(container);

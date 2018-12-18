@@ -7,6 +7,8 @@ namespace PersonalProject.Models
 {
     public class AspIdModel
     {
-        public int AspId { get; set; }
+       public string AspNetUserId { get; set; }
+        public int BankAccountId { get; set; }
+        public decimal Value { get; set; }
     }
 }

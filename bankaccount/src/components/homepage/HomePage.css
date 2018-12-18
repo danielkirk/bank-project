@@ -1,0 +1,41 @@
+.page {
+  position: absolute;
+  left: 0;
+  right: 0;
+}
+
+.fade-appear.fade-enter {
+  opacity: 0;
+  z-index: 1;
+}
+
+.fade-exit {
+  opacity: 1;
+}
+
+.fade-exit.fade-exit-active {
+  opacity: 0;
+  transition: opacity 200ms linear;
+}
+
+.fade-appear-active.fade-enter.fade-enter-active {
+  opacity: 1;
+  transition: opacity 400ms linear 200ms;
+}
+
+.background {
+  background-image: url("https://d2v9y0dukr6mq2.cloudfront.net/video/thumbnail/EPzzjHhuxijr01n5f/business-financial-bank-gold-reserves-concept-stack-of-golden-bars-with-silver-bar-in-the-bank-vault-abstract-background_4octe63ul__F0000.png");
+  background-size: cover;
+  min-height: 100%;
+  min-width: 100%;
+  position: fixed;
+  max-height: 150px;
+  overflow-y: scroll;
+  top: 0;
+  left: 0;
+}
+.transparent {
+  zoom: 1;
+  filter: alpha(opacity=50);
+  opacity: 0.5;
+}

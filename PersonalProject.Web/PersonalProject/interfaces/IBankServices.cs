@@ -11,5 +11,8 @@ namespace PersonalProject.interfaces
     {
         int Insert(BankAccountModel model);
         List<BankAccountJoinModel> GetById(string id);
+        object InsertTransaction(BankAccountTransactionModel model);
+        AspEmail GetUserByEmail(string Email);
+        AspIdModel GetBankAccountByAspNetId(string AspNetId);
     }
 }

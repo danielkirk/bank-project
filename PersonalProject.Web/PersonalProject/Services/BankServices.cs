@@ -58,11 +58,75 @@ namespace PersonalProject.Services
                         model.AspNetUserId = reader.GetString(idx++);
                         model.TransactionId = reader.GetInt32(idx++);
                         model.TransactionAmount = reader.GetDecimal(idx++);
+                        model.TransactionDate = reader.GetDateTime(idx++);
                         result.Add(model);
                     }
                      return result;
                 }
             }
         }
+
+        public AspEmail GetUserByEmail(string Email)
+        {
+            using(SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
+            {
+                conn.Open();
+                using(SqlCommand cmd = new SqlCommand("AspNetUsers_SelectByUserName", conn))
+                {
+                        AspEmail model = new AspEmail();
+                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@UserName", Email);
+
+                    SqlDataReader reader = cmd.ExecuteReader();
+                        reader.Read();
+                        int idx = 0;
+                        model.AspId = reader.GetString(idx);
+                        return model;
+                }
+            }
+        }
+
+        public AspIdModel GetBankAccountByAspNetId(string AspNetId)
+        {
+            using(SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
+            {
+                conn.Open();
+                using(SqlCommand cmd = new SqlCommand("UserBankAccountJoin_View", conn))
+                {
+                    AspIdModel model = new AspIdModel();
+                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@AspNetUserId", AspNetId);
+
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    reader.Read();
+                    int idx = 0;
+                    model.AspNetUserId = reader.GetString(idx++);
+                    model.BankAccountId = reader.GetInt32(idx++);
+                    model.Value = reader.GetDecimal(idx++);
+                    return model;                    
+                }
+            }
+        }
+
+        public object InsertTransaction(BankAccountTransactionModel model)
+        {
+            using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
+            {
+                conn.Open();
+                using (SqlCommand cmd = new SqlCommand("Bankaccounttransactions_Insert", conn))
+                {
+                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+                    cmd.Parameters.AddWithValue("@BankAccountId", model.BankAccountId);
+                    cmd.Parameters.AddWithValue("@TransactionId", model.TransactionId);
+                    cmd.Parameters.AddWithValue("@TransactionAmount", model.TransactionAmount);
+                    cmd.Parameters.AddWithValue("@TransactionDate", model.TransactionDate);
+
+                    cmd.ExecuteNonQuery();
+                    return model;
+                }
+            }
+        }
+
     }
 }

@@ -1,5 +1,3 @@
-C:\SF.Code\C61\personal_project\PersonalProject.Web\PersonalProject\bin\System.Web.Http.xml
-C:\SF.Code\C61\personal_project\PersonalProject.Web\PersonalProject\bin\System.Web.Mvc.xml
 C:\SF.Code\C61\personal_project\PersonalProject.Web\PersonalProject\bin\PersonalProject.dll.config
 C:\SF.Code\C61\personal_project\PersonalProject.Web\PersonalProject\bin\PersonalProject.dll
 C:\SF.Code\C61\personal_project\PersonalProject.Web\PersonalProject\bin\PersonalProject.pdb
@@ -100,7 +98,9 @@ C:\SF.Code\C61\personal_project\PersonalProject.Web\PersonalProject\bin\HtmlAgil
 C:\SF.Code\C61\personal_project\PersonalProject.Web\PersonalProject\bin\Newtonsoft.Json.xml
 C:\SF.Code\C61\personal_project\PersonalProject.Web\PersonalProject\bin\System.Net.Http.Formatting.xml
 C:\SF.Code\C61\personal_project\PersonalProject.Web\PersonalProject\bin\System.Web.Helpers.xml
+C:\SF.Code\C61\personal_project\PersonalProject.Web\PersonalProject\bin\System.Web.Http.xml
 C:\SF.Code\C61\personal_project\PersonalProject.Web\PersonalProject\bin\System.Web.Http.WebHost.xml
+C:\SF.Code\C61\personal_project\PersonalProject.Web\PersonalProject\bin\System.Web.Mvc.xml
 C:\SF.Code\C61\personal_project\PersonalProject.Web\PersonalProject\bin\System.Web.Optimization.xml
 C:\SF.Code\C61\personal_project\PersonalProject.Web\PersonalProject\bin\System.Web.Razor.xml
 C:\SF.Code\C61\personal_project\PersonalProject.Web\PersonalProject\bin\System.Web.WebPages.xml

@@ -11,5 +11,6 @@ namespace PersonalProject.Models
         public string AspNetUserId { get; set; }
         public int TransactionId { get; set; }
         public decimal TransactionAmount { get;set; }
+        public DateTime TransactionDate { get; set; }
     }
 }

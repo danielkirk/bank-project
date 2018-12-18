@@ -32,6 +32,23 @@ namespace PersonalProject.Controllers
         {
             return bankServices.GetById(id);
         }
+
+        [Route("transactions"), HttpPost]
+        public object InsertTransactions(BankAccountTransactionModel model)
+        {
+            return bankServices.InsertTransaction(model);
+        }
         
+        [Route(""), HttpGet]
+        public AspEmail GetUserByEmail(string Email)
+        {
+            return bankServices.GetUserByEmail(Email);
+        }
+
+        [Route("bankaccount"), HttpGet]
+        public AspIdModel GetBankAccount(string AspNetId)
+        {
+            return bankServices.GetBankAccountByAspNetId(AspNetId);
+        }
     }
 }
