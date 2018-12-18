@@ -1,0 +1,21 @@
+.realbackground {
+  background-image: url("https://www.clevelandfilm.com/wp-content/uploads/2017/04/ClevelandFilm-bank-vault.jpg");
+  background-size: cover;
+  min-height: 100%;
+  min-width: 100%;
+  position: fixed;
+  max-height: 150px;
+  top: 0;
+  left: 0;
+}
+
+.bankBackground {
+  background-image: url("https://d1nz104zbf64va.cloudfront.net/dt/a/o/how-much-are-bank-ceos-paid-we-have-the-answer.jpg");
+  background-size: cover;
+  min-height: 100%;
+  min-width: 100%;
+  position: fixed;
+  max-height: 150px;
+  top: 0;
+  left: 0;
+}
